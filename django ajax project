@@ -1,0 +1,173 @@
+Great! 😊
+Yahan ek **chhota sa Django AJAX example project** hai jisme hum:
+
+### 🎯 **Goal:**
+
+User ek naam submit karega (via AJAX) → Django backend me save hoga → bina page reload ke response milega.
+
+---
+
+## ⚙️ 1. **Django Project Setup**
+
+```bash
+django-admin startproject ajax_demo
+cd ajax_demo
+python manage.py startapp users
+```
+
+---
+
+## 🗃️ 2. **Model (users/models.py)**
+
+```python
+from django.db import models
+
+class Person(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+```
+
+---
+
+## 🔌 3. **Register Model in Admin (optional)**
+
+```python
+# users/admin.py
+from django.contrib import admin
+from .models import Person
+
+admin.site.register(Person)
+```
+
+---
+
+## 🔧 4. **Add App to Settings**
+
+```python
+# ajax_demo/settings.py
+INSTALLED_APPS = [
+    ...
+    'users',
+]
+```
+
+---
+
+## 🔁 5. **Create View (users/views.py)**
+
+```python
+from django.shortcuts import render
+from django.http import JsonResponse
+from .models import Person
+import json
+
+def home(request):
+    return render(request, 'users/index.html')
+
+def save_person(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        name = data.get("name")
+        Person.objects.create(name=name)
+        return JsonResponse({"message": f"{name} saved!"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
+```
+
+---
+
+## 🌐 6. **URLs Setup**
+
+### In `ajax_demo/urls.py`:
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('users.urls')),
+]
+```
+
+### In `users/urls.py` (create if not exists):
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('save/', views.save_person, name='save_person'),
+]
+```
+
+---
+
+## 🖼️ 7. **Template with AJAX (users/templates/users/index.html)**
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX Demo</title>
+</head>
+<body>
+    <h2>Enter Your Name</h2>
+    <input type="text" id="name" placeholder="Your name">
+    <button onclick="submitName()">Submit</button>
+
+    <p id="response"></p>
+
+    <script>
+        function getCSRFToken() {
+            const cookieValue = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)')?.pop();
+            return cookieValue;
+        }
+
+        function submitName() {
+            const name = document.getElementById('name').value;
+
+            fetch('/save/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: JSON.stringify({ name })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').innerText = data.message || data.error;
+            });
+        }
+    </script>
+</body>
+</html>
+```
+
+---
+
+## 📦 8. **Run Migrations and Server**
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+
+Open your browser at `http://127.0.0.1:8000/`
+
+---
+
+## ✅ Result
+
+* User types name → clicks submit
+* JavaScript sends it via AJAX to Django
+* Django saves it to DB
+* Response shows on screen — **without page reload**
+
+---
+
+Would you like me to zip and send this sample project code to you as a downloadable file?
