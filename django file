@@ -1,0 +1,147 @@
+Here's a **Django Mini Project Plan** for a **Customer Manager Web App**, ideal for learning or showcasing basic-to-intermediate Django skills:
+
+---
+
+## ✅ **Project Title**: Customer Manager Web App
+
+### 📌 **Objective**
+
+Build a web application that allows users to manage customer records—add, update, view, and delete customer information.
+
+---
+
+## 🧱 **1. Project Setup**
+
+### 🔹 Tasks:
+
+* Create a virtual environment
+* Install Django: `pip install django`
+* Start a Django project: `django-admin startproject customer_manager`
+* Start an app: `python manage.py startapp customers`
+
+### 🔹 Tools:
+
+* Python 3.x
+* Django 4.x
+* SQLite (default)
+* Bootstrap (for styling)
+
+---
+
+## 🗃️ **2. Models Design**
+
+### 🔹 Model: `Customer`
+
+| Field        | Type          | Notes               |
+| ------------ | ------------- | ------------------- |
+| `id`         | AutoField     | Primary Key         |
+| `first_name` | CharField     | max\_length=50      |
+| `last_name`  | CharField     | max\_length=50      |
+| `email`      | EmailField    | unique=True         |
+| `phone`      | CharField     | max\_length=15      |
+| `address`    | TextField     | Optional            |
+| `created_at` | DateTimeField | auto\_now\_add=True |
+
+---
+
+## 📋 **3. Features and Functionality**
+
+### 🔹 CRUD Operations:
+
+* ✅ Create new customer
+* 📝 View customer list & details
+* ✏️ Update customer info
+* ❌ Delete customer
+
+### 🔹 Additional Features (Optional):
+
+* Search by name or email
+* Pagination on customer list
+* Export to CSV
+* Admin Panel customization
+
+---
+
+## 📄 **4. Views & URLs**
+
+### 🔹 Views:
+
+* `customer_list` – Display all customers
+* `customer_detail` – View customer info
+* `customer_create` – Form to add customer
+* `customer_update` – Edit customer
+* `customer_delete` – Confirm delete
+
+### 🔹 URL Patterns:
+
+```python
+path('', customer_list, name='customer_list'),
+path('customer/<int:pk>/', customer_detail, name='customer_detail'),
+path('customer/new/', customer_create, name='customer_create'),
+path('customer/<int:pk>/edit/', customer_update, name='customer_update'),
+path('customer/<int:pk>/delete/', customer_delete, name='customer_delete'),
+```
+
+---
+
+## 🎨 **5. Templates (HTML + Bootstrap)**
+
+* `base.html` – Common layout
+* `customer_list.html`
+* `customer_detail.html`
+* `customer_form.html`
+* `customer_confirm_delete.html`
+
+---
+
+## 🔐 **6. Authentication (Optional)**
+
+* Use Django's built-in `User` model
+* Add login/logout functionality
+* Restrict access to authenticated users
+
+---
+
+## ⚙️ **7. Admin Panel Setup**
+
+* Register the `Customer` model
+* Customize list display and search in admin
+
+```python
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email', 'phone')
+    search_fields = ('first_name', 'last_name', 'email')
+```
+
+---
+
+## 🧪 **8. Testing (Optional for Mini Project)**
+
+* Test model creation
+* Test views and forms using Django's `TestCase`
+
+---
+
+## 🚀 **9. Deployment (Optional)**
+
+* Use PythonAnywhere, Heroku, or Render
+* Steps:
+
+  * Set `ALLOWED_HOSTS`
+  * Collect static files
+  * Setup production database (optional)
+  * Deploy
+
+---
+
+## ✅ **Deliverables**
+
+* Working Django app (with basic CRUD)
+* Code on GitHub (well-organized)
+* `README.md` with instructions
+* Screenshot of app or demo link (if deployed)
+
+---
+
+Would you like the basic starter code scaffolded too (models, views, templates)?
